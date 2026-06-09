@@ -375,6 +375,7 @@ def render_dialogue(lesson: Dict[str, Any]) -> None:
             data=dialogue_transcript(lesson).encode("utf-8"),
             file_name=f"{lesson.get('lesson_id', 'lesson')}_transcript.txt",
             mime="text/plain",
+            key=f"dialogue_transcript_download_{lesson.get('lesson_id', 'lesson')}",
             use_container_width=True,
         )
 
@@ -392,6 +393,7 @@ def render_downloads(lesson: Dict[str, Any]) -> None:
             data=make_lesson_asset_zip(lesson),
             file_name=f"{lesson.get('lesson_id', 'lesson')}_media_pack.zip",
             mime="application/zip",
+            key=f"media_pack_download_{lesson.get('lesson_id', 'lesson')}",
             use_container_width=True,
         )
     else:
@@ -405,6 +407,7 @@ def render_downloads(lesson: Dict[str, Any]) -> None:
         data=lesson_json.encode("utf-8"),
         file_name=f"{lesson.get('lesson_id', 'lesson')}.json",
         mime="application/json",
+        key=f"lesson_json_download_{lesson.get('lesson_id', 'lesson')}",
         use_container_width=True,
     )
     st.download_button(
@@ -412,6 +415,7 @@ def render_downloads(lesson: Dict[str, Any]) -> None:
         data=dialogue_transcript(lesson).encode("utf-8"),
         file_name=f"{lesson.get('lesson_id', 'lesson')}_transcript.txt",
         mime="text/plain",
+        key=f"downloads_transcript_download_{lesson.get('lesson_id', 'lesson')}",
         use_container_width=True,
     )
 
