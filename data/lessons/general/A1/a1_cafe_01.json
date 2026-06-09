@@ -1,0 +1,104 @@
+{
+  "track": "General",
+  "level": "A1",
+  "lesson_id": "a1_cafe_01",
+  "title": "At the Café",
+  "cartoon_panels": [
+    "images/general/A1/cafe1.png",
+    "images/general/A1/cafe2.png",
+    "images/general/A1/cafe3.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Customer",
+      "text": "Hello. Can I have a coffee, please?",
+      "audio": "audio/general/A1/cafe_line1.mp3"
+    },
+    {
+      "speaker": "Barista",
+      "text": "Sure. Small or large?",
+      "audio": "audio/general/A1/cafe_line2.mp3"
+    },
+    {
+      "speaker": "Customer",
+      "text": "Large, please.",
+      "audio": "audio/general/A1/cafe_line3.mp3"
+    },
+    {
+      "speaker": "Barista",
+      "text": "Anything else?",
+      "audio": "audio/general/A1/cafe_line4.mp3"
+    },
+    {
+      "speaker": "Customer",
+      "text": "No, that's all. Thank you.",
+      "audio": "audio/general/A1/cafe_line5.mp3"
+    },
+    {
+      "speaker": "Barista",
+      "text": "You're welcome.",
+      "audio": "audio/general/A1/cafe_line6.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "Can I have...?",
+      "meaning": "A common way to order something politely.",
+      "examples": [
+        "Can I have a tea, please?",
+        "Can I have the bill, please?"
+      ]
+    },
+    {
+      "phrase": "Anything else?",
+      "meaning": "A question to check if the person wants more items.",
+      "examples": [
+        "Anything else, or is that all?",
+        "Anything else for you today?"
+      ]
+    },
+    {
+      "phrase": "That's all.",
+      "meaning": "You don't want anything more.",
+      "examples": [
+        "No, that's all, thanks."
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "Can I ____ a coffee, please?",
+        "answer": "have"
+      },
+      {
+        "prompt": "Small or ____?",
+        "answer": "large"
+      },
+      {
+        "prompt": "No, that's ____. Thank you.",
+        "answer": "all"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "Which sentence is polite for ordering?",
+        "options": [
+          "Give me a coffee.",
+          "I want coffee.",
+          "Can I have a coffee, please?"
+        ],
+        "answer": "Can I have a coffee, please?"
+      },
+      {
+        "question": "What does 'Anything else?' mean?",
+        "options": [
+          "Do you want to leave?",
+          "Do you want something more?",
+          "Do you like coffee?"
+        ],
+        "answer": "Do you want something more?"
+      }
+    ]
+  }
+}

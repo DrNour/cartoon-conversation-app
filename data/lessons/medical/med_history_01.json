@@ -1,0 +1,98 @@
+{
+  "track": "Medical",
+  "level": "Intermediate",
+  "lesson_id": "med_history_01",
+  "title": "Taking Patient History",
+  "cartoon_panels": [
+    "images/medical/history1.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Doctor",
+      "text": "Good morning. I'm Dr. Ahmed. How can I help you today?",
+      "audio": "audio/medical/history_line1.mp3"
+    },
+    {
+      "speaker": "Patient",
+      "text": "Good morning, doctor. I've had a strong headache since yesterday.",
+      "audio": "audio/medical/history_line2.mp3"
+    },
+    {
+      "speaker": "Doctor",
+      "text": "When exactly did the headache start?",
+      "audio": "audio/medical/history_line3.mp3"
+    },
+    {
+      "speaker": "Patient",
+      "text": "It started last night, around 9 p.m.",
+      "audio": "audio/medical/history_line4.mp3"
+    },
+    {
+      "speaker": "Doctor",
+      "text": "On a scale from 1 to 10, how strong is the pain?",
+      "audio": "audio/medical/history_line5.mp3"
+    },
+    {
+      "speaker": "Patient",
+      "text": "Maybe 7. It's quite strong.",
+      "audio": "audio/medical/history_line6.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "How can I help you today?",
+      "meaning": "A polite, open question to start a consultation.",
+      "examples": [
+        "How can I help you today?",
+        "How can I help you this morning?"
+      ]
+    },
+    {
+      "phrase": "When did it start?",
+      "meaning": "A question about the onset of a symptom.",
+      "examples": [
+        "When did the pain start?",
+        "When did the fever start?"
+      ]
+    },
+    {
+      "phrase": "On a scale from 1 to 10...",
+      "meaning": "A way to measure pain intensity.",
+      "examples": [
+        "On a scale from 1 to 10, how strong is the pain?"
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "How can I ____ you today?",
+        "answer": "help"
+      },
+      {
+        "prompt": "When did the headache ____?",
+        "answer": "start"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "Which question is best to ask about onset?",
+        "options": [
+          "How strong is the pain?",
+          "When did it start?",
+          "Where do you work?"
+        ],
+        "answer": "When did it start?"
+      },
+      {
+        "question": "Why do doctors use 'On a scale from 1 to 10'?",
+        "options": [
+          "To check the patient's age.",
+          "To measure pain intensity.",
+          "To ask about temperature."
+        ],
+        "answer": "To measure pain intensity."
+      }
+    ]
+  }
+}

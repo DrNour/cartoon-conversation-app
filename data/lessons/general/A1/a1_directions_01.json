@@ -1,0 +1,95 @@
+{
+  "track": "General",
+  "level": "A1",
+  "lesson_id": "a1_directions_01",
+  "title": "Asking for Directions",
+  "cartoon_panels": [
+    "images/general/A1/dir1.png",
+    "images/general/A1/dir2.png",
+    "images/general/A1/dir3.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Tourist",
+      "text": "Excuse me. Where is the metro station?",
+      "audio": "audio/general/A1/dir_line1.mp3"
+    },
+    {
+      "speaker": "Local",
+      "text": "It's over there, next to the bank.",
+      "audio": "audio/general/A1/dir_line2.mp3"
+    },
+    {
+      "speaker": "Tourist",
+      "text": "Thank you!",
+      "audio": "audio/general/A1/dir_line3.mp3"
+    },
+    {
+      "speaker": "Local",
+      "text": "You're welcome.",
+      "audio": "audio/general/A1/dir_line4.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "Excuse me.",
+      "meaning": "A polite way to start a question with a stranger.",
+      "examples": [
+        "Excuse me, where is the bus stop?",
+        "Excuse me, can you help me?"
+      ]
+    },
+    {
+      "phrase": "Where is...?",
+      "meaning": "A question to ask about a place.",
+      "examples": [
+        "Where is the toilet?",
+        "Where is the supermarket?"
+      ]
+    },
+    {
+      "phrase": "next to",
+      "meaning": "Very close to something, on one side.",
+      "examples": [
+        "The hotel is next to the mall.",
+        "My car is parked next to the tree."
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "____ me. Where is the metro station?",
+        "answer": "Excuse"
+      },
+      {
+        "prompt": "It's ____ there, next to the bank.",
+        "answer": "over"
+      },
+      {
+        "prompt": "The cafe is ____ to the bank.",
+        "answer": "next"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "What do you say before a question to a stranger?",
+        "options": [
+          "Hey you!",
+          "Excuse me.",
+          "Come here."
+        ],
+        "answer": "Excuse me."
+      },
+      {
+        "question": "What does 'next to' mean?",
+        "options": [
+          "Far away.",
+          "Behind something.",
+          "Very close to something."
+        ],
+        "answer": "Very close to something."
+      }
+    ]
+  }
+}

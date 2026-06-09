@@ -1,0 +1,99 @@
+{
+  "track": "General",
+  "level": "A1",
+  "lesson_id": "a1_shopping_01",
+  "title": "Shopping for Basics",
+  "cartoon_panels": [
+    "images/general/A1/shop1.png",
+    "images/general/A1/shop2.png",
+    "images/general/A1/shop3.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Customer",
+      "text": "Hi. How much is this T-shirt?",
+      "audio": "audio/general/A1/shop_line1.mp3"
+    },
+    {
+      "speaker": "Shop Assistant",
+      "text": "It's 40 dirhams.",
+      "audio": "audio/general/A1/shop_line2.mp3"
+    },
+    {
+      "speaker": "Customer",
+      "text": "Do you have it in blue?",
+      "audio": "audio/general/A1/shop_line3.mp3"
+    },
+    {
+      "speaker": "Shop Assistant",
+      "text": "Yes, here you are.",
+      "audio": "audio/general/A1/shop_line4.mp3"
+    },
+    {
+      "speaker": "Customer",
+      "text": "Great, I'll take it. Thank you.",
+      "audio": "audio/general/A1/shop_line5.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "How much is this?",
+      "meaning": "A question to ask about the price.",
+      "examples": [
+        "How much is this T-shirt?",
+        "How much is this bag?"
+      ]
+    },
+    {
+      "phrase": "Do you have it in [color]?",
+      "meaning": "A question to ask for a different color.",
+      "examples": [
+        "Do you have it in black?",
+        "Do you have it in red?"
+      ]
+    },
+    {
+      "phrase": "I'll take it.",
+      "meaning": "You decide to buy something.",
+      "examples": [
+        "I like this one. I'll take it."
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "How ____ is this T-shirt?",
+        "answer": "much"
+      },
+      {
+        "prompt": "Do you have it in ____?",
+        "answer": "blue"
+      },
+      {
+        "prompt": "Great, I'll ____ it.",
+        "answer": "take"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "Which question is about price?",
+        "options": [
+          "Where is the shop?",
+          "How much is this?",
+          "Do you like this?"
+        ],
+        "answer": "How much is this?"
+      },
+      {
+        "question": "What does 'I'll take it.' mean?",
+        "options": [
+          "I don't like it.",
+          "I will buy it.",
+          "I will come back later."
+        ],
+        "answer": "I will buy it."
+      }
+    ]
+  }
+}

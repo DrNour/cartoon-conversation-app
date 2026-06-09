@@ -1,0 +1,100 @@
+{
+  "track": "General",
+  "level": "A1",
+  "lesson_id": "a1_routines_01",
+  "title": "Daily Routines",
+  "cartoon_panels": [
+    "images/general/A1/routine1.png",
+    "images/general/A1/routine2.png",
+    "images/general/A1/routine3.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Ali",
+      "text": "I wake up at 7 o'clock.",
+      "audio": "audio/general/A1/routine_line1.mp3"
+    },
+    {
+      "speaker": "Ali",
+      "text": "I have breakfast at 7:30.",
+      "audio": "audio/general/A1/routine_line2.mp3"
+    },
+    {
+      "speaker": "Ali",
+      "text": "I go to work at 8.",
+      "audio": "audio/general/A1/routine_line3.mp3"
+    },
+    {
+      "speaker": "Friend",
+      "text": "Do you work every day?",
+      "audio": "audio/general/A1/routine_line4.mp3"
+    },
+    {
+      "speaker": "Ali",
+      "text": "No, I don't work on Friday.",
+      "audio": "audio/general/A1/routine_line5.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "I wake up at...",
+      "meaning": "Say the time you get out of bed.",
+      "examples": [
+        "I wake up at 6.",
+        "I wake up at 7:30 on weekdays."
+      ]
+    },
+    {
+      "phrase": "I have breakfast at...",
+      "meaning": "Say the time you eat in the morning.",
+      "examples": [
+        "I have breakfast at 8.",
+        "I have breakfast at home."
+      ]
+    },
+    {
+      "phrase": "Do you work every day?",
+      "meaning": "Ask about someone's work routine.",
+      "examples": [
+        "Do you work every day?",
+        "Do you study every day?"
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "I ____ up at 7 o'clock.",
+        "answer": "wake"
+      },
+      {
+        "prompt": "I have ____ at 7:30.",
+        "answer": "breakfast"
+      },
+      {
+        "prompt": "No, I don't work on ____.",
+        "answer": "Friday"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "Which sentence talks about morning?",
+        "options": [
+          "I go to bed at 11.",
+          "I have breakfast at 7:30.",
+          "I finish work at 6."
+        ],
+        "answer": "I have breakfast at 7:30."
+      },
+      {
+        "question": "What does Ali do at 8?",
+        "options": [
+          "He wakes up.",
+          "He has breakfast.",
+          "He goes to work."
+        ],
+        "answer": "He goes to work."
+      }
+    ]
+  }
+}

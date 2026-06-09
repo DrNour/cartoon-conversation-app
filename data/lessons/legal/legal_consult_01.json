@@ -1,0 +1,81 @@
+{
+  "track": "Legal",
+  "level": "Intermediate",
+  "lesson_id": "legal_consult_01",
+  "title": "First Client Consultation",
+  "cartoon_panels": [
+    "images/legal/consult1.png"
+  ],
+  "dialogue": [
+    {
+      "speaker": "Lawyer",
+      "text": "Good afternoon. I'm Ms. Khan, your lawyer. Please, have a seat.",
+      "audio": "audio/legal/consult1.mp3"
+    },
+    {
+      "speaker": "Client",
+      "text": "Good afternoon. Thank you.",
+      "audio": "audio/legal/consult2.mp3"
+    },
+    {
+      "speaker": "Lawyer",
+      "text": "Can you tell me what happened, in your own words?",
+      "audio": "audio/legal/consult3.mp3"
+    },
+    {
+      "speaker": "Client",
+      "text": "My landlord sent me a letter. He wants to end my contract early.",
+      "audio": "audio/legal/consult4.mp3"
+    },
+    {
+      "speaker": "Lawyer",
+      "text": "I see. Do you have a copy of the letter with you?",
+      "audio": "audio/legal/consult5.mp3"
+    }
+  ],
+  "key_phrases": [
+    {
+      "phrase": "In your own words",
+      "meaning": "Ask the client to describe the situation freely, without legal language.",
+      "examples": [
+        "Tell me what happened, in your own words.",
+        "Please explain the situation in your own words."
+      ]
+    },
+    {
+      "phrase": "I see.",
+      "meaning": "A short, neutral response to show you are listening.",
+      "examples": [
+        "I see. And what happened next?"
+      ]
+    }
+  ],
+  "tasks": {
+    "gap_fill": [
+      {
+        "prompt": "Can you tell me what happened, in your own ____?",
+        "answer": "words"
+      }
+    ],
+    "multiple_choice": [
+      {
+        "question": "What does 'in your own words' mean?",
+        "options": [
+          "Use complex legal vocabulary.",
+          "Repeat the letter exactly.",
+          "Explain the situation in a simple, personal way."
+        ],
+        "answer": "Explain the situation in a simple, personal way."
+      },
+      {
+        "question": "Why does the lawyer say 'I see'?",
+        "options": [
+          "To say she agrees.",
+          "To show she is listening and processing.",
+          "To change the topic."
+        ],
+        "answer": "To show she is listening and processing."
+      }
+    ]
+  }
+}
