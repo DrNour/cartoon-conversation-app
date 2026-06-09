@@ -1,17 +1,6 @@
 # Cartoon Conversations
 
-A Streamlit app for practising real-life English through short cartoon-style dialogues, key phrases, and instant-feedback exercises.
-
-## What is enhanced in this version
-
-- Responsive Streamlit layout with tabs for cartoon panels, dialogue, phrases, practice, and role-play.
-- Sidebar lesson browser with track, level, and lesson search.
-- Safer lesson loading with JSON validation and readable error messages.
-- Asset handling relative to the app folder, so the app is easier to run from different locations.
-- Clear placeholders when image/audio files are listed in JSON but not yet included in the project.
-- Copyable dialogue transcripts.
-- Role-play mode that hides one speaker's lines for oral practice.
-- Practice scoring, progress bar, answer reset, and more forgiving answer checking for punctuation/case.
+A Streamlit app for short, media-rich English conversation lessons. Lessons are stored as JSON files and can include MP4 videos, image panels, audio files, key phrases, practice tasks, transcripts, and downloadable media packs.
 
 ## Run locally
 
@@ -20,29 +9,77 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Add lessons
+## Lesson structure
 
-Add `.json` files under `data/lessons/`. The app expects each lesson to include at least:
+Add lesson JSON files anywhere under:
+
+```text
+data/lessons/
+```
+
+The app reads them automatically.
+
+Minimum required fields:
 
 ```json
 {
   "track": "General",
   "level": "A1",
-  "lesson_id": "unique_lesson_id",
-  "title": "Lesson title",
-  "dialogue": [
-    {"speaker": "Speaker 1", "text": "Hello!"}
-  ]
+  "lesson_id": "a1_directions_01",
+  "title": "Asking for Directions",
+  "dialogue": []
 }
 ```
 
-Optional fields include `cartoon_panels`, `audio`, `key_phrases`, and `tasks`.
+## Adding real videos
 
-## Media assets
+Put MP4 files under a clear folder such as:
 
-The current lesson files refer to image and audio paths such as:
+```text
+videos/general/A1/
+```
 
-- `images/general/A1/cafe1.png`
-- `audio/general/A1/cafe_line1.mp3`
+Then reference them in the lesson JSON:
 
-Those media files are not included in the original zip. Add them under matching folders inside the app directory to make images and audio appear.
+```json
+"video_panels": [
+  {
+    "path": "videos/general/A1/directions_panel1.mp4",
+    "caption": "Panel 1: Asking for the metro station",
+    "description": "The tourist politely stops a local person and asks for directions."
+  }
+]
+```
+
+The app will show the videos in the first tab and create download buttons automatically.
+
+## Adding images
+
+Put image files under a folder such as:
+
+```text
+images/general/A1/
+```
+
+Then reference them in the lesson JSON:
+
+```json
+"cartoon_panels": [
+  "images/general/A1/dir1.png",
+  "images/general/A1/dir2.png",
+  "images/general/A1/dir3.png"
+]
+```
+
+## Downloads
+
+The app includes:
+
+- download buttons for individual MP4, PNG/JPG, and MP3 files
+- a full lesson media-pack zip download
+- transcript download
+- lesson JSON download
+
+## Included sample media
+
+The `Asking for Directions` lesson includes three sample MP4 video panels and three PNG image panels so the video/download workflow works immediately after deployment.

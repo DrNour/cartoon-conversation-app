@@ -91,5 +91,22 @@
         "answer": "Very close to something."
       }
     ]
-  }
+  },
+  "video_panels": [
+    {
+      "path": "videos/general/A1/directions_panel1.mp4",
+      "caption": "Panel 1: Asking for the metro station",
+      "description": "The tourist politely stops a local person and asks for directions."
+    },
+    {
+      "path": "videos/general/A1/directions_panel2.mp4",
+      "caption": "Panel 2: Giving directions",
+      "description": "The local person points to the metro station next to the bank."
+    },
+    {
+      "path": "videos/general/A1/directions_panel3.mp4",
+      "caption": "Panel 3: Thanking and closing",
+      "description": "The tourist says thank you and the local person replies politely."
+    }
+  ]
 }

@@ -1,7 +1,10 @@
+import io
 import json
+import mimetypes
 import re
+import zipfile
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import streamlit as st
 
@@ -23,6 +26,7 @@ CEFR_ORDER = {
 }
 
 REQUIRED_LESSON_FIELDS = {"track", "level", "lesson_id", "title", "dialogue"}
+MEDIA_FIELD_NAMES = ("video_panels", "cartoon_panels")
 
 
 # ---------- Page setup ----------
@@ -160,6 +164,77 @@ def reset_lesson_inputs(lesson_id: str) -> None:
         del st.session_state[key]
 
 
+def normalise_media_item(item: Union[str, Dict[str, Any]], default_caption: str) -> Dict[str, str]:
+    """Accept either a plain path string or a richer media dictionary from lesson JSON."""
+    if isinstance(item, str):
+        return {"path": item, "caption": default_caption, "description": ""}
+    if isinstance(item, dict):
+        path = str(item.get("path") or item.get("src") or "")
+        caption = str(item.get("caption") or item.get("title") or default_caption)
+        description = str(item.get("description") or "")
+        return {"path": path, "caption": caption, "description": description}
+    return {"path": "", "caption": default_caption, "description": ""}
+
+
+def mime_for_path(path: Path) -> str:
+    mime, _ = mimetypes.guess_type(path.name)
+    return mime or "application/octet-stream"
+
+
+def render_download_button(asset_path: Path, label: str, key: str) -> None:
+    if not asset_path.exists() or not asset_path.is_file():
+        return
+    with asset_path.open("rb") as f:
+        st.download_button(
+            label=label,
+            data=f.read(),
+            file_name=asset_path.name,
+            mime=mime_for_path(asset_path),
+            key=key,
+            use_container_width=True,
+        )
+
+
+def collect_lesson_assets(lesson: Dict[str, Any]) -> List[Path]:
+    """Return all existing video, image, and audio assets referenced by a lesson."""
+    paths: List[Path] = []
+
+    for field_name in MEDIA_FIELD_NAMES:
+        for i, item in enumerate(lesson.get(field_name, []), start=1):
+            media = normalise_media_item(item, f"{field_name} {i}")
+            if media["path"]:
+                path = resolve_asset_path(media["path"])
+                if path.exists() and path.is_file():
+                    paths.append(path)
+
+    for turn in lesson.get("dialogue", []):
+        audio_path = turn.get("audio")
+        if audio_path:
+            path = resolve_asset_path(audio_path)
+            if path.exists() and path.is_file():
+                paths.append(path)
+
+    # Deduplicate while preserving order.
+    seen = set()
+    unique_paths = []
+    for path in paths:
+        if path not in seen:
+            seen.add(path)
+            unique_paths.append(path)
+    return unique_paths
+
+
+def make_lesson_asset_zip(lesson: Dict[str, Any]) -> bytes:
+    """Build a downloadable zip containing all existing media assets for one lesson."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for path in collect_lesson_assets(lesson):
+            zf.write(path, arcname=str(path.relative_to(APP_DIR)))
+        zf.writestr("transcript.txt", dialogue_transcript(lesson))
+        zf.writestr("lesson.json", json.dumps({k: v for k, v in lesson.items() if k != "_path"}, indent=2, ensure_ascii=False))
+    return buffer.getvalue()
+
+
 # ---------- UI components ----------
 
 def render_header(total_lessons: int) -> None:
@@ -168,7 +243,7 @@ def render_header(total_lessons: int) -> None:
         <div class="hero-card">
             <h1 style="margin:0;">💬 Cartoon Conversations</h1>
             <p style="font-size:1.05rem; margin:0.45rem 0 0;">
-                Practice real-life English through short dialogues, key phrases, and instant-feedback activities.
+                Practice real-life English through short dialogues, downloadable videos, key phrases, and instant-feedback activities.
             </p>
             <p class="small-muted" style="margin:0.5rem 0 0;">
                 {total_lessons} lesson{'s' if total_lessons != 1 else ''} loaded from the lesson bank.
@@ -183,22 +258,54 @@ def render_lesson_overview(lesson: Dict[str, Any]) -> None:
     dialogue_count = len(lesson.get("dialogue", []))
     phrase_count = len(lesson.get("key_phrases", []))
     task_count = count_tasks(lesson)
+    video_count = len(lesson.get("video_panels", []))
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Track", lesson.get("track", "—"))
     col2.metric("Level", lesson.get("level", "—"))
-    col3.metric("Dialogue turns", dialogue_count)
-    col4.metric("Practice items", task_count)
+    col3.metric("Videos", video_count)
+    col4.metric("Dialogue turns", dialogue_count)
+    col5.metric("Practice items", task_count)
 
     st.markdown(
         f"""
         <div class="lesson-card">
             <strong>Lesson file:</strong> <code>{lesson.get('_path', 'unknown')}</code><br>
-            <span class="small-muted">Use the tabs below to move from noticing → guided practice → role-play.</span>
+            <span class="small-muted">Use the tabs below to watch, download, practise, and role-play.</span>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_video_panels(lesson: Dict[str, Any]) -> None:
+    videos = lesson.get("video_panels", [])
+    if not videos:
+        st.info("No videos are listed for this lesson yet. Add MP4 files and reference them with `video_panels` in the lesson JSON.")
+        return
+
+    st.markdown("#### Watch the lesson videos")
+    columns = st.columns(min(3, len(videos)))
+    for index, item in enumerate(videos):
+        media = normalise_media_item(item, f"Video {index + 1}")
+        video_path = resolve_asset_path(media["path"])
+        with columns[index % len(columns)]:
+            if video_path.exists():
+                st.video(str(video_path))
+                st.caption(media["caption"])
+                if media["description"]:
+                    st.write(media["description"])
+                render_download_button(video_path, "Download video", f"download_video_{lesson['lesson_id']}_{index}")
+            else:
+                st.markdown(
+                    f"""
+                    <div class="media-missing">
+                        🎬 <strong>{media['caption']}</strong><br>
+                        Add video asset:<br><code>{media['path']}</code>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
 
 def render_cartoon_panels(lesson: Dict[str, Any]) -> None:
@@ -207,22 +314,31 @@ def render_cartoon_panels(lesson: Dict[str, Any]) -> None:
         st.info("No cartoon panels are listed for this lesson yet.")
         return
 
+    st.markdown("#### Optional image panels")
     columns = st.columns(min(3, len(panels)))
-    for index, img_path in enumerate(panels):
-        panel_path = resolve_asset_path(img_path)
+    for index, item in enumerate(panels):
+        media = normalise_media_item(item, f"Panel {index + 1}")
+        panel_path = resolve_asset_path(media["path"])
         with columns[index % len(columns)]:
             if panel_path.exists():
-                st.image(str(panel_path), caption=f"Panel {index + 1}", use_container_width=True)
+                st.image(str(panel_path), caption=media["caption"], use_container_width=True)
+                render_download_button(panel_path, "Download image", f"download_image_{lesson['lesson_id']}_{index}")
             else:
                 st.markdown(
                     f"""
                     <div class="media-missing">
-                        🖼️ <strong>Panel {index + 1}</strong><br>
-                        Add image asset:<br><code>{img_path}</code>
+                        🖼️ <strong>{media['caption']}</strong><br>
+                        Add image asset:<br><code>{media['path']}</code>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
+
+
+def render_story_media(lesson: Dict[str, Any]) -> None:
+    render_video_panels(lesson)
+    st.divider()
+    render_cartoon_panels(lesson)
 
 
 def render_dialogue(lesson: Dict[str, Any]) -> None:
@@ -248,9 +364,56 @@ def render_dialogue(lesson: Dict[str, Any]) -> None:
             audio_file = resolve_asset_path(audio_path)
             if audio_file.exists():
                 st.audio(str(audio_file))
+                render_download_button(audio_file, "Download audio", f"download_audio_{lesson['lesson_id']}_{i}")
+            else:
+                st.caption(f"Audio not found: `{audio_path}`")
 
     with st.expander("Copyable transcript"):
         st.code(dialogue_transcript(lesson), language="text")
+        st.download_button(
+            label="Download transcript",
+            data=dialogue_transcript(lesson).encode("utf-8"),
+            file_name=f"{lesson.get('lesson_id', 'lesson')}_transcript.txt",
+            mime="text/plain",
+            use_container_width=True,
+        )
+
+
+def render_downloads(lesson: Dict[str, Any]) -> None:
+    assets = collect_lesson_assets(lesson)
+    st.markdown("#### Lesson downloads")
+
+    if assets:
+        st.write("Download individual media files below, or download the whole lesson pack as one zip.")
+        for path in assets:
+            st.write(f"• `{path.relative_to(APP_DIR)}`")
+        st.download_button(
+            label="Download full lesson pack (.zip)",
+            data=make_lesson_asset_zip(lesson),
+            file_name=f"{lesson.get('lesson_id', 'lesson')}_media_pack.zip",
+            mime="application/zip",
+            use_container_width=True,
+        )
+    else:
+        st.info("No downloadable media files exist yet for this lesson. Once you add MP4, PNG/JPG, or MP3 files, they will appear here automatically.")
+
+    st.divider()
+    st.markdown("#### Lesson data")
+    lesson_json = json.dumps({k: v for k, v in lesson.items() if k != "_path"}, indent=2, ensure_ascii=False)
+    st.download_button(
+        label="Download lesson JSON",
+        data=lesson_json.encode("utf-8"),
+        file_name=f"{lesson.get('lesson_id', 'lesson')}.json",
+        mime="application/json",
+        use_container_width=True,
+    )
+    st.download_button(
+        label="Download transcript",
+        data=dialogue_transcript(lesson).encode("utf-8"),
+        file_name=f"{lesson.get('lesson_id', 'lesson')}_transcript.txt",
+        mime="text/plain",
+        use_container_width=True,
+    )
 
 
 def render_key_phrases(lesson: Dict[str, Any]) -> None:
@@ -420,7 +583,7 @@ def render_sidebar(lessons: List[Dict[str, Any]]) -> Dict[str, Any]:
     lesson = next(l for l in filtered if l["title"] == selected_title)
 
     st.sidebar.divider()
-    st.sidebar.caption("Tip: add more JSON lessons under `data/lessons/` and they will appear automatically.")
+    st.sidebar.caption("Tip: add MP4 files under `videos/` and reference them with `video_panels` in your lesson JSON.")
     return lesson
 
 
@@ -447,12 +610,12 @@ if load_errors:
 st.header(lesson["title"])
 render_lesson_overview(lesson)
 
-story_tab, dialogue_tab, phrases_tab, practice_tab, roleplay_tab = st.tabs(
-    ["1 · Cartoon", "2 · Dialogue", "3 · Key phrases", "4 · Practice", "5 · Role-play"]
+story_tab, dialogue_tab, phrases_tab, practice_tab, roleplay_tab, downloads_tab = st.tabs(
+    ["1 · Videos", "2 · Dialogue", "3 · Key phrases", "4 · Practice", "5 · Role-play", "6 · Downloads"]
 )
 
 with story_tab:
-    render_cartoon_panels(lesson)
+    render_story_media(lesson)
 
 with dialogue_tab:
     render_dialogue(lesson)
@@ -466,6 +629,9 @@ with practice_tab:
 with roleplay_tab:
     render_role_play(lesson)
 
+with downloads_tab:
+    render_downloads(lesson)
+
 st.caption(
-    "Enhanced version: responsive layout, lesson search, validated loading, media placeholders, copyable transcripts, role-play mode, progress scoring, and reset support."
+    "Enhanced video version: MP4 lesson videos, individual downloads, full lesson media packs, transcript downloads, responsive layout, validated loading, role-play mode, and progress scoring."
 )
